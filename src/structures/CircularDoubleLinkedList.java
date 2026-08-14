@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CircularDoubleLinkedList {
+public class CircularDoubleLinkedList implements PlaybackMode{
     private class Node {
         Song song;
         Node next;
