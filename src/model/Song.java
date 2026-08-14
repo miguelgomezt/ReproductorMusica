@@ -14,14 +14,14 @@ public class Song {
     private int rating;
     private String coverImage;
 
-    public Song(String title, String artist, String album, int durationInSeconds, int releaseYear,
-                String genre ,int releaseMonth, int rating) {
+    public Song(String title, String artist, String album, int durationInSeconds,
+                String genre, int releaseYear) {
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.durationInSeconds = durationInSeconds;
-        this.releaseYear = releaseYear;
         this.genre = genre;
+        this.releaseYear = releaseYear;
         this.rating = 0;
         this.coverImage = null;
     }
