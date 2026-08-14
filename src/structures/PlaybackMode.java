@@ -17,7 +17,7 @@ public interface PlaybackMode {
 
     Song previous();
 
-    Song getCurretSong();
+    Song getCurrentSong();
 
 
     List<Song> getAllSongs();

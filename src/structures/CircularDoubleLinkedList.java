@@ -96,7 +96,7 @@ public class CircularDoubleLinkedList {
 
     ///Reordenar aleatoriamente las canciones
     public void shuffle(){
-        List<Song> songs = getAllSong();
+        List<Song> songs = getAllSongs();
         Collections.shuffle(songs);
         current = null;
         size = 0;
