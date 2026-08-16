@@ -118,12 +118,6 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void showNotImplemented() {
-        JOptionPane.showMessageDialog(this,
-                "Este modo aún no está implementado por el equipo.");
-        modeSelector.setSelectedIndex(0);
-    }
-
     // ==================== Utilidades ====================
 
     /** Carga canciones de ejemplo para poder probar la app mientras se integra todo. */
