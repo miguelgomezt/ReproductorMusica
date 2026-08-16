@@ -1,13 +1,13 @@
 package ui;
 
-import model.Song;
+import app.MusicLibraryManager;
 import structures.PlaybackMode;
 import structures.CircularDoubleLinkedList;
+import structures.SimpleQueue;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 /**
  * Ventana principal de la aplicación.
@@ -15,29 +15,28 @@ import java.util.List;
  * Responsabilidad ÚNICA de esta clase:
  * - Armar el layout general (selector de modo arriba, biblioteca al centro,
  *   reproductor abajo).
- * - Mantener la referencia al PlaybackMode actualmente activo.
- * - Cambiar de estructura de datos cuando el usuario cambia de modo, y
- *   notificar a los paneles para que se actualicen.
+ * - Mantener la referencia al MusicLibraryManager (que a su vez mantiene el
+ *   PlaybackMode activo).
+ * - Cambiar de estructura de datos cuando el usuario cambia de modo.
  *
- * Esta clase NO debe contener lógica de biblioteca (agregar/editar/eliminar
+ * Esta clase NO contiene lógica de biblioteca (agregar/editar/eliminar
  * canciones) ni lógica de reproducción (play/pause/progreso) — eso vive en
  * SongLibraryPanel (Persona 2) y PlayerPanel (Persona 3) respectivamente.
  */
 public class MainFrame extends JFrame {
 
-    private PlaybackMode currentMode;
+    private MusicLibraryManager libraryManager;
     private JComboBox<String> modeSelector;
 
-    // Referencias a los paneles de los compañeros.
-    // NOTA (equipo): reemplazar los placeholders de abajo por estas clases
-    // reales una vez estén listas.
-    // private SongLibraryPanel libraryPanel;
+    private SongLibraryPanel libraryPanel;
+    // TODO (Persona 3): descomentar cuando PlayerPanel esté implementado.
     // private PlayerPanel playerPanel;
 
     public MainFrame() {
         super("Reproductor - Lenguajes y Compiladores");
 
-        currentMode = new CircularDoubleLinkedList();
+        PlaybackMode initialMode = new CircularDoubleLinkedList();
+        libraryManager = new MusicLibraryManager(initialMode);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 650);
@@ -45,7 +44,7 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout(8, 8));
 
         add(buildTopPanel(), BorderLayout.NORTH);
-        add(buildLibraryPlaceholder(), BorderLayout.CENTER);
+        add(buildLibraryPanel(), BorderLayout.CENTER);
         add(buildPlayerPlaceholder(), BorderLayout.SOUTH);
 
         loadSampleData();
@@ -69,24 +68,20 @@ public class MainFrame extends JFrame {
         return topPanel;
     }
 
-    // ==================== PLACEHOLDERS (reemplazar por las clases reales) ====================
+    // ==================== PANEL CENTRAL: biblioteca (ya conectada) ====================
 
-    /**
-     * TODO (equipo): reemplazar este placeholder por:
-     * libraryPanel = new SongLibraryPanel(currentMode);
-     * return libraryPanel;
-     */
-    private JPanel buildLibraryPlaceholder() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Biblioteca (Persona 2)"));
-        panel.add(new JLabel("Aquí va SongLibraryPanel", SwingConstants.CENTER), BorderLayout.CENTER);
-        return panel;
+    private SongLibraryPanel buildLibraryPanel() {
+        libraryPanel = new SongLibraryPanel(libraryManager);
+        return libraryPanel;
     }
 
+    // ==================== PANEL INFERIOR: reproductor (placeholder, Persona 3) ====================
+
     /**
-     * TODO (equipo): reemplazar este placeholder por:
-     * playerPanel = new PlayerPanel(currentMode);
+     * TODO (Persona 3): reemplazar este placeholder por:
+     * playerPanel = new PlayerPanel(libraryManager);
      * return playerPanel;
+     * cuando PlayerPanel.java esté implementado.
      */
     private JPanel buildPlayerPlaceholder() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -100,42 +95,34 @@ public class MainFrame extends JFrame {
 
     /**
      * Se ejecuta cuando el usuario cambia el modo en el selector.
-     * Transfiere las canciones actuales a la nueva estructura de datos
-     * y notifica a los paneles para que se refresquen.
+     * Le pide a MusicLibraryManager que cambie de estructura de datos;
+     * el manager se encarga de transferir las canciones y notificar
+     * a los paneles suscritos (como SongLibraryPanel) para que se
+     * refresquen solos, gracias al patrón Observer que ya implementó
+     * Persona 2 (LibraryChangeListener).
      *
-     * TODO (equipo): completar el switch cuando SimpleQueue,
-     * BinarySearchTree y PriorityQueueMode estén listas.
+     * TODO (equipo): completar el switch cuando BinarySearchTree
+     * y PriorityQueueMode implementen PlaybackMode correctamente.
      */
     private void onModeChanged(ActionEvent e) {
         String selected = (String) modeSelector.getSelectedItem();
-        List<Song> songs = currentMode.getAllSongs();
 
         switch (selected) {
             case "Aleatorio (Lista Circular Doble)":
-                currentMode = new CircularDoubleLinkedList();
+                libraryManager.setMode(new CircularDoubleLinkedList());
                 break;
             case "Orden de llegada (Cola Simple)":
-                // currentMode = new SimpleQueue();
-                showNotImplemented();
-                return;
+                libraryManager.setMode(new SimpleQueue());
+                break;
             case "Alfabético (Árbol Binario de Búsqueda)":
-                // currentMode = new BinarySearchTree();
+                // libraryManager.setMode(new BinarySearchTree());
                 showNotImplemented();
                 return;
             case "Por calificación (Priority Queue)":
-                // currentMode = new PriorityQueueMode();
+                // libraryManager.setMode(new PriorityQueueMode());
                 showNotImplemented();
                 return;
         }
-
-        for (Song s : songs) {
-            currentMode.addSong(s);
-        }
-
-        // TODO (equipo): cuando existan los paneles reales, notificarles
-        // el cambio de modo, por ejemplo:
-        // libraryPanel.setMode(currentMode);
-        // playerPanel.setMode(currentMode);
     }
 
     private void showNotImplemented() {
@@ -148,12 +135,12 @@ public class MainFrame extends JFrame {
 
     /** Carga canciones de ejemplo para poder probar la app mientras se integra todo. */
     private void loadSampleData() {
-        currentMode.addSong(new Song("Bohemian Rhapsody", "Queen", "A Night at the Opera", 355, "Rock", 1975));
-        currentMode.addSong(new Song("Blinding Lights", "The Weeknd", "After Hours", 200, "Synthpop", 2020));
-        currentMode.addSong(new Song("Ojos Así", "Shakira", "¿Dónde Están los Ladrones?", 246, "Pop", 1998));
+        libraryManager.addSong(new model.Song("Bohemian Rhapsody", "Queen", "A Night at the Opera", 355, "Rock", 1975));
+        libraryManager.addSong(new model.Song("Blinding Lights", "The Weeknd", "After Hours", 200, "Synthpop", 2020));
+        libraryManager.addSong(new model.Song("Ojos Así", "Shakira", "¿Dónde Están los Ladrones?", 246, "Pop", 1998));
     }
 
-    public PlaybackMode getCurrentMode() {
-        return currentMode;
+    public MusicLibraryManager getLibraryManager() {
+        return libraryManager;
     }
 }
