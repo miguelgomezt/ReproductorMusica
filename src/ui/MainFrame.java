@@ -5,6 +5,10 @@ import structures.PlaybackMode;
 import structures.CircularDoubleLinkedList;
 import structures.SimpleQueue;
 
+import structures.BinarySearchTree;
+import structures.PriorityQueueMode;
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,8 +33,7 @@ public class MainFrame extends JFrame {
     private JComboBox<String> modeSelector;
 
     private SongLibraryPanel libraryPanel;
-    // TODO (Persona 3): descomentar cuando PlayerPanel esté implementado.
-    // private PlayerPanel playerPanel;
+     private PlayerPanel playerPanel;
 
     public MainFrame() {
         super("Reproductor - Lenguajes y Compiladores");
@@ -45,7 +48,7 @@ public class MainFrame extends JFrame {
 
         add(buildTopPanel(), BorderLayout.NORTH);
         add(buildLibraryPanel(), BorderLayout.CENTER);
-        add(buildPlayerPlaceholder(), BorderLayout.SOUTH);
+        add(buildPlayerPanel(), BorderLayout.SOUTH);
 
         loadSampleData();
     }
@@ -77,18 +80,10 @@ public class MainFrame extends JFrame {
 
     // ==================== PANEL INFERIOR: reproductor (placeholder, Persona 3) ====================
 
-    /**
-     * TODO (Persona 3): reemplazar este placeholder por:
-     * playerPanel = new PlayerPanel(libraryManager);
-     * return playerPanel;
-     * cuando PlayerPanel.java esté implementado.
-     */
-    private JPanel buildPlayerPlaceholder() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Reproductor (Persona 3)"));
-        panel.add(new JLabel("Aquí va PlayerPanel", SwingConstants.CENTER), BorderLayout.CENTER);
-        panel.setPreferredSize(new Dimension(0, 150));
-        return panel;
+
+    private PlayerPanel buildPlayerPanel() {
+        playerPanel = new PlayerPanel(libraryManager);
+        return playerPanel;
     }
 
     // ==================== Cambio de modo ====================
@@ -115,13 +110,11 @@ public class MainFrame extends JFrame {
                 libraryManager.setMode(new SimpleQueue());
                 break;
             case "Alfabético (Árbol Binario de Búsqueda)":
-                // libraryManager.setMode(new BinarySearchTree());
-                showNotImplemented();
-                return;
+                libraryManager.setMode(new BinarySearchTree());
+                break;
             case "Por calificación (Priority Queue)":
-                // libraryManager.setMode(new PriorityQueueMode());
-                showNotImplemented();
-                return;
+                libraryManager.setMode(new PriorityQueueMode());
+                break;
         }
     }
 
