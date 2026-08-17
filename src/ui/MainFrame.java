@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
  *
  * Esta clase NO contiene lógica de biblioteca (agregar/editar/eliminar
  * canciones) ni lógica de reproducción (play/pause/progreso) — eso vive en
- * SongLibraryPanel (Persona 2) y PlayerPanel (Persona 3) respectivamente.
+ * SongLibraryPanel y PlayerPanel
  */
 public class MainFrame extends JFrame {
 
@@ -120,7 +120,6 @@ public class MainFrame extends JFrame {
 
     // ==================== Utilidades ====================
 
-    /** Carga canciones de ejemplo para poder probar la app mientras se integra todo. */
     private void loadSampleData() {
         libraryManager.addSong(new model.Song("Bohemian Rhapsody", "Queen", "A Night at the Opera", 355, "Rock", 1975));
         libraryManager.addSong(new model.Song("Blinding Lights", "The Weeknd", "After Hours", 200, "Synthpop", 2020));
