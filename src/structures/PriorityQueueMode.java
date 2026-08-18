@@ -11,16 +11,6 @@ import java.util.List;
  * navega la biblioteca ordenada por calificación del usuario (0-100), de
  * mayor a menor. Implementa structures.PlaybackMode.
  *
- * CAMBIO DE DISEÑO IMPORTANTE respecto a la primera versión (por qué)
- * ---------------------------------------------------------------------
- * Originalmente pensé next() como una extracción destructiva (poll), al
- * estilo de la Cola Simple del Modo 2: la canción "reproducida" salía de
- * la estructura. Pero MusicLibraryManager.setMode() transfiere la
- * biblioteca completa entre modos usando getAllSongs(), y espera que
- * TODOS los modos conserven sus canciones mientras se navega (igual que
- * el Modo 1 y el Modo 3). Si next() aquí borrara canciones, cambiar de
- * "Por calificación" a otro modo y volver haría perder canciones.
- *
  * Por eso, igual que en BinarySearchTree, se separan dos cosas:
  *  - El HEAP (this.heap): estructura de datos real, usada para que
  *    addSong/removeSong sean eficientes (O(log n) / O(n)).
