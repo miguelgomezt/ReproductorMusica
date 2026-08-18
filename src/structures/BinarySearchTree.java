@@ -10,22 +10,6 @@ import java.util.List;
  * Modo 3: "Reproducción alfabética". Implementa la interfaz real del
  * equipo, structures.PlaybackMode.
  *
- * CAMBIOS DE DISEÑO respecto a versiones anteriores (por qué)
- * ---------------------------------------------------------------------
- * - PlaybackMode NO es genérica (todos sus métodos usan Song
- *   directamente), así que esta clase deja de ser BinarySearchTree<T> y
- *   pasa a trabajar directamente con Song.
- * - MainFrame instancia los modos SIN argumentos (new
- *   CircularDoubleLinkedList()), así que el criterio de orden ya no se
- *   inyecta por constructor: queda fijo dentro de la clase, comparando
- *   por Song.getTitle() (ignorando mayúsculas/minúsculas), que es
- *   justamente lo que pide el Modo 3.
- * - MusicLibraryManager.setMode() transfiere TODAS las canciones del
- *   modo anterior al nuevo llamando addSong() para cada una obtenida de
- *   getAllSongs(). Esto significa que ningún modo debe "perder"
- *   canciones al navegar; next()/previous() deben ser NO destructivos
- *   (solo mueven un índice), a diferencia de lo que se podría pensar
- *   de un árbol usado como cola.
  *
  * MANEJO DE EMPATES: si dos canciones tienen el mismo título pero
  * distinto artista, se desempata con Song.equals() (título + artista)
