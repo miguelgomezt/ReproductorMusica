@@ -121,9 +121,9 @@ public class MainFrame extends JFrame {
     // ==================== Utilidades ====================
 
     private void loadSampleData() {
-        libraryManager.addSong(new model.Song("Bohemian Rhapsody", "Queen", "A Night at the Opera", 355, "Rock", 1975));
+        libraryManager.addSong(new model.Song("Nothing Else Matters", "Metallica", "Metallica", 389, "Heavy Metal", 1991));
         libraryManager.addSong(new model.Song("Blinding Lights", "The Weeknd", "After Hours", 200, "Synthpop", 2020));
-        libraryManager.addSong(new model.Song("Ojos Así", "Shakira", "¿Dónde Están los Ladrones?", 246, "Pop", 1998));
+        libraryManager.addSong(new model.Song("Persiana americana", "Soda Stereo", "Signos", 338, "Rock", 1986));
     }
 
     public MusicLibraryManager getLibraryManager() {
