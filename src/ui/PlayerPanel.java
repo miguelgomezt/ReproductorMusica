@@ -254,11 +254,13 @@ public class PlayerPanel extends JPanel implements MusicLibraryManager.LibraryCh
     }
 
     private void actualizarEstadoBotones() {
-        boolean hayCancion = (cancionActual != null);
-        btnReproducir.setEnabled(hayCancion && !reproduciendo);
-        btnPausar.setEnabled(hayCancion && reproduciendo);
-        btnSiguiente.setEnabled(hayCancion);
-        btnAnterior.setEnabled(hayCancion);
+        boolean hayCancionActual = (cancionActual != null);
+        boolean bibliotecaTieneCanciones = !libraryManager.getAllSongs().isEmpty();
+
+        btnReproducir.setEnabled(hayCancionActual && !reproduciendo);
+        btnPausar.setEnabled(hayCancionActual && reproduciendo);
+        btnSiguiente.setEnabled(bibliotecaTieneCanciones); // antes: hayCancion
+        btnAnterior.setEnabled(hayCancionActual);
     }
 
     private String formatearTiempo(int totalSegundos) {

@@ -18,7 +18,7 @@ public class SimpleQueue implements PlaybackMode {
 
     @Override
     public Song getCurrentSong() {
-        return null;
+        return current;
     }
 
 
