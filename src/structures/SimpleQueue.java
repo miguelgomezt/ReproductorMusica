@@ -30,11 +30,17 @@ public class SimpleQueue implements PlaybackMode {
             this.song = song;
         }
     }
-    private Node head;
-    private Node tail;
-    private int size;
-    private Song current;
+    private Node head; ///Primer nodo (Proximo a reproducirse)
+    private Node tail; ///Ultimo nodo (Donde se agregan los nuevos)
+    private int size;  ///cantidad de canciones
+    private Song current; ///Cancion reproducida recientemente
 
+
+
+
+    ///Agregamos una cancion al final de la cola.
+    /// Complejidad: 0(1) como ya se tiene la referencia
+    /// No hace falta recorrer la cola
     @Override
     public void addSong (Song song){
         if(song == null){
@@ -46,12 +52,18 @@ public class SimpleQueue implements PlaybackMode {
             head = newNode;
             tail = newNode;
         }else  {
+            ///Se conecta al final y "tail" se actualiza.
+            ///Apunta al nuevo ultimo
             tail.next = newNode;
             tail = newNode;
 
         }
         size++;
     }
+
+    ///Elimina cancion
+    /// Diferente del next que elimina siempre el primero
+    /// Complejidad 0(n) en el peor de los casos hay que recorrer toda la cola.
     @Override
     public boolean removeSong(Song song) {
         if (song == null || head == null) {
@@ -78,6 +90,11 @@ public class SimpleQueue implements PlaybackMode {
         }
         return false;
     }
+
+
+    ///Avanza a la siguiente cancion
+    /// Trae la cancion que esta al frente de la cola
+    /// Complejidad 0(1)
     @Override
     public Song next() {
         if (head == null) {
@@ -94,6 +111,8 @@ public class SimpleQueue implements PlaybackMode {
         current = oldHead.song;
         return current;
     }
+
+    ///No permite regresar a diferencia de las otras estructuras
     @Override
     public Song previous() {
         throw new UnsupportedOperationException("La cola no permite regresar a canciones anteriores");
